@@ -19,17 +19,3 @@ def register_handlers(bot):
         markup.add(btn3, btn4)
         
         bot.send_message(message.chat.id, text, reply_markup=markup, parse_mode='Markdown')
-    
-    @bot.callback_query_handler(func=lambda call: call.data in ["help"])
-    def handle_menu(call):
-        if call.data == "help":
-            text = """
-            **Помощь**
-
-            Здесь вы можете найти ответы на часто задаваемые вопросы и получить поддержку по курсу.
-            """
-        
-        markup = types.InlineKeyboardMarkup()
-        btn_back = types.InlineKeyboardButton("Назад в меню", callback_data="back_to_menu")
-        markup.add(btn_back)
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, reply_markup=markup, parse_mode='Markdown')
