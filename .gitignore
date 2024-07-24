@@ -5,3 +5,4 @@
 /tests/
 conftest.py
 .pytest_cache
+.gitattributes
