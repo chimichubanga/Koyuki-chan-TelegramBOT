@@ -1,11 +1,8 @@
 from aiogram import types, Dispatcher
+from cogs.main_menu import get_welcome_text  # Импортируем функцию кэширования
 
 async def handle_back_to_menu(call: types.CallbackQuery):
-    text = """
-    **Добро пожаловать в Koyuki-chan!**
-
-    Я Koyuki-chan, ваша виртуальная помощница, созданная для упрощения навигации по курсу "Код будущего".
-    """
+    text = await get_welcome_text()  # Используем кэшированную функцию
     
     markup = types.InlineKeyboardMarkup(inline_keyboard=[
         [types.InlineKeyboardButton(text="📚 Список дз", callback_data="homework_list")],
