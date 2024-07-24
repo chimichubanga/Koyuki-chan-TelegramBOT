@@ -1,7 +1,9 @@
 from aiogram import types, Dispatcher
+from aiocache import cached
 
-async def handle_homework_list(call: types.CallbackQuery):
-    text = """
+@cached(ttl=300)
+async def get_homework_list_text():
+    return """
     **ДОМАШНИЕ ЗАДАНИЯ ТРЕТЬЕГО МОДУЛЯ**
 
     *1 вебинар*. Тема: Знакомство с телеграмм ботами, получение токена, создание первой команды 
@@ -32,6 +34,9 @@ async def handle_homework_list(call: types.CallbackQuery):
 
     **Важно**: для перевода на следующий модуль обязательное количество домашних заданий - 3 штуки, сданный тест и одно посещение вебинара.
     """
+
+async def handle_homework_list(call: types.CallbackQuery):
+    text = await get_homework_list_text()
     markup = types.InlineKeyboardMarkup(inline_keyboard=[
         [types.InlineKeyboardButton(text="Назад в меню", callback_data="back_to_menu")]
     ])
