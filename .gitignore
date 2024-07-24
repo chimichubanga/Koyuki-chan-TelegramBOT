@@ -1,8 +1,15 @@
-/__pycache__/
-*/__pycache__/
-/.env
-/.vs
-/tests/
-conftest.py
-.pytest_cache
-.gitattributes
+# Python
+__pycache__/
+*.py[cod]
+*.so
+
+# Environments
+.env
+venv/
+env/
+.venv/
+ENV/
+
+# IDEs
+.vscode/
+.idea/
