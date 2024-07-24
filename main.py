@@ -1,13 +1,31 @@
 import logging
 import asyncio
-from aiogram import Bot, Dispatcher
+from aiogram import Bot, Dispatcher, types
 from aiogram.types import BotCommand
 from aiogram.fsm.storage.memory import MemoryStorage
 from config import TOKEN
-from cogs import main_menu, navigation, homework_list, webinar_records, bot_info, help
+from aiocache import caches, cached
+from cogs import main_menu, navigation, homework_list, webinar_records, bot_info, help, logging as user_logging
 
 # Настройка логирования
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler("bot.log"),
+        logging.StreamHandler()
+    ]
+)
+
+# Настройка кэширования
+caches.set_config({
+    'default': {
+        'cache': 'aiocache.SimpleMemoryCache',
+        'serializer': {
+            'class': 'aiocache.serializers.PickleSerializer'
+        }
+    }
+})
 
 # Инициализация бота
 bot = Bot(token=TOKEN)
@@ -22,6 +40,7 @@ homework_list.register_handlers(dp)
 webinar_records.register_handlers(dp)
 bot_info.register_handlers(dp)
 help.register_handlers(dp)
+user_logging.register_handlers(dp)
 
 async def set_commands(bot: Bot):
     commands = [
@@ -29,6 +48,17 @@ async def set_commands(bot: Bot):
         BotCommand(command="/menu", description="Показать меню")
     ]
     await bot.set_my_commands(commands)
+
+# Глобальный обработчик ошибок
+async def on_error(update: types.Update, exception: Exception):
+    logging.error(f"Update {update} caused error {exception}")
+    if isinstance(update, types.CallbackQuery):
+        await update.message.answer("Произошла ошибка. Пожалуйста, попробуйте позже.")
+    elif isinstance(update, types.Message):
+        await update.answer("Произошла ошибка. Пожалуйста, попробуйте позже.")
+    return True
+
+dp.errors.register(on_error)
 
 async def main():
     await set_commands(bot)
