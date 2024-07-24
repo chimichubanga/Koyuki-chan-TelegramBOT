@@ -1,18 +1,38 @@
-# main.py
-import telebot
+import logging
+import asyncio
+from aiogram import Bot, Dispatcher
+from aiogram.types import BotCommand
+from aiogram.fsm.storage.memory import MemoryStorage
 from config import TOKEN
 from cogs import main_menu, navigation, homework_list, webinar_records, bot_info, help
 
-bot = telebot.TeleBot(TOKEN)
+# Настройка логирования
+logging.basicConfig(level=logging.INFO)
 
-# Register cogs
-main_menu.register_handlers(bot)
-navigation.register_handlers(bot)
-homework_list.register_handlers(bot)
-webinar_records.register_handlers(bot)
-bot_info.register_handlers(bot)
-help.register_handlers(bot)
+# Инициализация бота
+bot = Bot(token=TOKEN)
+# Инициализация диспетчера с использованием памяти для хранения состояний
+storage = MemoryStorage()
+dp = Dispatcher(storage=storage)
+
+# Регистрация обработчиков
+main_menu.register_handlers(dp)
+navigation.register_handlers(dp)
+homework_list.register_handlers(dp)
+webinar_records.register_handlers(dp)
+bot_info.register_handlers(dp)
+help.register_handlers(dp)
+
+async def set_commands(bot: Bot):
+    commands = [
+        BotCommand(command="/start", description="Запустить бота"),
+        BotCommand(command="/menu", description="Показать меню")
+    ]
+    await bot.set_my_commands(commands)
+
+async def main():
+    await set_commands(bot)
+    await dp.start_polling(bot)
 
 if __name__ == '__main__':
-    print("Bot is running...")
-    bot.infinity_polling()
+    asyncio.run(main())
