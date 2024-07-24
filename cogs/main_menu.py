@@ -1,12 +1,17 @@
 from aiogram import types, Dispatcher
 from aiogram.filters import Command
+from aiocache import cached
 
-async def send_welcome(message: types.Message):
-    text = """
+@cached(ttl=60)
+async def get_welcome_text():
+    return """
     **Добро пожаловать в Koyuki-chan!**
 
     Я Koyuki-chan, ваша виртуальная помощница, созданная для упрощения навигации по курсу "Код будущего".
     """
+
+async def send_welcome(message: types.Message):
+    text = await get_welcome_text()
     
     markup = types.InlineKeyboardMarkup(inline_keyboard=[
         [types.InlineKeyboardButton(text="📚 Список дз", callback_data="homework_list")],
