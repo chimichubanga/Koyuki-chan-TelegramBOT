@@ -7,7 +7,7 @@ async def handle_help(call: types.CallbackQuery):
     Добро пожаловать в раздел помощи Koyuki-chan! Выберите один из разделов ниже:
     """
     markup = types.InlineKeyboardMarkup(inline_keyboard=[
-        [types.InlineKeyboardButton(text="📝 Помощь с дз", callback_data="homework_help")],
+        [types.InlineKeyboardButton(text="📝 Помощь с ДЗ", callback_data="homework_help")],
         [types.InlineKeyboardButton(text="❓ Частые вопросы", callback_data="faq")],
         [types.InlineKeyboardButton(text="⬅️ Назад в меню", callback_data="back_to_menu")]
     ])
@@ -18,7 +18,7 @@ async def handle_homework_help(call: types.CallbackQuery):
     **ПОМОЩЬ С ДЗ**
 
     Если у вас возникли вопросы или проблемы с домашними заданиями, вот несколько советов:
-    
+
     1. Пересмотрите записи вебинаров, связанные с темой задания.
     2. Обратитесь к материалам курса и учебникам.
     3. Задайте вопрос в чате курса или свяжитесь с преподавателем.
