@@ -1,7 +1,9 @@
 from aiogram import types, Dispatcher
+from aiocache import cached
 
-async def handle_bot_info(call: types.CallbackQuery):
-    text = """
+@cached(ttl=300)
+async def get_bot_info_text():
+    return """
     **О Koyuki-chan**
 
     Привет! Я Koyuki-chan, ваша виртуальная помощница, созданная для упрощения навигации по курсу Python. Моя миссия — помочь вам легко и удобно получать доступ к важной информации по курсу и домашним заданиям.
@@ -23,7 +25,9 @@ async def handle_bot_info(call: types.CallbackQuery):
 
     Спасибо, что используете Koyuki-chan! Желаю вам успехов в изучении Python!
     """
-    
+
+async def handle_bot_info(call: types.CallbackQuery):
+    text = await get_bot_info_text()
     markup = types.InlineKeyboardMarkup(inline_keyboard=[
         [types.InlineKeyboardButton(text="Назад в меню", callback_data="back_to_menu")]
     ])
