@@ -1,7 +1,9 @@
 from aiogram import types, Dispatcher
+from aiocache import cached
 
-async def handle_webinar_records(call: types.CallbackQuery):
-    text = """
+@cached(ttl=300)
+async def get_webinar_records_text():
+    return """
     **ЗАПИСИ ВЕБИНАРОВ ТРЕТЬЕГО МОДУЛЯ**
 
     *1 вебинар*. Тема: Знакомство с телеграмм ботами, получение токена, создание первой команды 
@@ -19,6 +21,9 @@ async def handle_webinar_records(call: types.CallbackQuery):
     *5 вебинар*. Тема: JSON. Работа с публичными API, отправка случайного изображения, библиотека requests (Часть 2)
     по ссылке: [ссылка](https://v.lscdn.ru/cdn7/synergy_academy/kb/wr_20240721_bot_otpravl_prognoz_pog_16_00_mish.mp4)
     """
+
+async def handle_webinar_records(call: types.CallbackQuery):
+    text = await get_webinar_records_text()
     markup = types.InlineKeyboardMarkup(inline_keyboard=[
         [types.InlineKeyboardButton(text="⬅️ Назад в меню", callback_data="back_to_menu")]
     ])
