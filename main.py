@@ -5,7 +5,7 @@ from aiogram.types import BotCommand
 from aiogram.fsm.storage.memory import MemoryStorage
 from config import TOKEN
 from aiocache import caches, cached
-from cogs import main_menu, navigation, homework_list, webinar_records, bot_info, help, logging as user_logging
+from cogs import main_menu, navigation, homework_list, webinar_records, bot_info, help, homework_help
 
 # Настройка логирования
 logging.basicConfig(
@@ -40,7 +40,7 @@ homework_list.register_handlers(dp)
 webinar_records.register_handlers(dp)
 bot_info.register_handlers(dp)
 help.register_handlers(dp)
-user_logging.register_handlers(dp)
+homework_help.register_handlers(dp)
 
 async def set_commands(bot: Bot):
     commands = [
